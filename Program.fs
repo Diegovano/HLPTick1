@@ -6,9 +6,41 @@
 
 /// answer to Tick1
 // the header given here is correct.
-let polarToCartesianApprox (r,theta) n = 
-    failwithf "Tick1 not yet implemented" // replace this line with your top-level implementation
 
+let fact x =
+    if x = 0 then 1 else [1..x] |> List.reduce (*)
+
+let even x =
+    if (x % 2) = 0 then true else false
+
+let poly x lst =
+    List.mapi (fun i a -> a * (float x ** float i)) lst |> List.reduce (+)
+
+
+let cosPolySign n =
+    if (n % 4) = 0 then 1.0 else -1.0
+
+let sinPolySign n =
+    if (n % 4) = 1 then 1.0 else -1.0
+
+let cosCoefs n =
+    List.map (fun i -> if even i then cosPolySign i * float (1.0 / (float <| fact i)) else 0) [0..n]
+
+let sinCoefs n =
+    List.map (fun i -> if not <| even i then sinPolySign i * float (1.0 / (float <| fact i)) else 0) [0..n]
+
+
+// let trigCoefs cos n =
+//     List.map (fun i -> if even i then (if cos then (cosPolySign i) else (-1.0 * cosPolySign i)) 
+// * float (1.0 / (float <| fact i)) else 0) [0..n]
+
+let cos x n =
+    poly x <| cosCoefs n
+let sin x n =
+    poly x <| sinCoefs n
+
+let polarToCartesianApprox (r,theta) n = 
+    (r * cos theta n, r * sin theta n)
 
 //--------------------testbench code - DO NOT CHANGE-----------------------------//
 
